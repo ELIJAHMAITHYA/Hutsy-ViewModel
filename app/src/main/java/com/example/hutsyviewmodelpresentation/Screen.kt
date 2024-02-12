@@ -14,21 +14,41 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hutsyviewmodelpresentation.ui.theme.HutsyViewModelPresentationTheme
 
 @Composable
-fun Elements(
-    modifier: Modifier = Modifier
-        .padding(20.dp)
-        .fillMaxWidth(),
-    viewModel: ViewModel = viewModel(),
+fun ElementsScreen(
+    modifier: Modifier = Modifier,
+    viewModel: EffectViewModel = viewModel(),
 ) {
-    val vmPresentation by viewModel.uiState.collectAsState()
+    val elementScreenState by viewModel.uiState.collectAsState()
+    ElementScreenContent(
+        number = elementScreenState.number,
+        onAdd3Clicked = viewModel::add3,
+        onminus3Clicked = viewModel::minus3,
+        onmultiply3Clicked = viewModel::mutliply3,
+        onresetClicked = viewModel::reset,
+    )
+}
+
+@Composable
+fun ElementScreenContent(
+    modifier: Modifier = Modifier,
+    number: Float,
+    onAdd3Clicked: () -> Unit,
+    onminus3Clicked: () -> Unit,
+    onmultiply3Clicked: () -> Unit,
+    onresetClicked: () -> Unit,
+
+) {
     Column(
-        modifier = Modifier
-            .padding(16.dp)
+        modifier = modifier
+            .padding(20.dp)
+            .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -37,11 +57,9 @@ fun Elements(
             text = "Hutsy ViewModel Dummy",
             fontSize = 25.sp,
         )
-        animatedCounter(counter = vmPresentation.number)
+        animatedCounter(counter = number)
         Button(
-            onClick = {
-                viewModel.add3()
-            },
+            onClick = onAdd3Clicked,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp),
@@ -50,9 +68,7 @@ fun Elements(
             Text(text = "+ 3 ")
         }
         Button(
-            onClick = {
-                viewModel.minus3()
-            },
+            onClick = onminus3Clicked,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp),
@@ -61,9 +77,7 @@ fun Elements(
             Text(text = " -3 ")
         }
         Button(
-            onClick = {
-                viewModel.mutliply3()
-            },
+            onClick = onmultiply3Clicked,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp),
@@ -72,9 +86,7 @@ fun Elements(
             Text(text = "X3")
         }
         Button(
-            onClick = {
-                viewModel.reset()
-            },
+            onClick = onresetClicked,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp),
@@ -82,5 +94,19 @@ fun Elements(
         ) {
             Text(text = "Reset")
         }
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun ElementScreenPreview() {
+    HutsyViewModelPresentationTheme {
+        ElementScreenContent(
+            number = 3.0F,
+            onAdd3Clicked = { },
+            onminus3Clicked = {  },
+            onmultiply3Clicked = { },
+            onresetClicked = {},
+        )
     }
 }
